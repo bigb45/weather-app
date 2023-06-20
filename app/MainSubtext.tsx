@@ -1,8 +1,6 @@
 import React from "react";
 
-function InfoText(props: any) {
-  console.log(props);
-
+function MainSubtext(props: any) {
   return (
     <div>
       <h2 className="text-3xl text-white drop-shadow-2xl shadow-black text-center">
@@ -15,4 +13,4 @@ function InfoText(props: any) {
   );
 }
 
-export default InfoText;
+export default MainSubtext;
