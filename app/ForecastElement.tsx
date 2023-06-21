@@ -16,8 +16,8 @@ function ForecastElement(props: any) {
 
   return (
     <motion.div
-      initial={{ y: -50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{
         delay: props.data.delay * 0.1,
         duration: 0.3,
