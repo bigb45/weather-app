@@ -13,11 +13,10 @@ export default function Home() {
   const [image, setImage] = useState<any>("");
   const [weather, setWeather] = useState<any>({});
   const [hourForecast, setHourForecast] = useState<any[]>([]);
-  let updateInterval = new Date().getSeconds();
 
   useEffect(() => {
     getWeather();
-  }, [updateInterval]);
+  }, []);
 
   const getBackgroundImage = async (query: string) => {
     const Access_Key = "nvUefDbjvYifQaZMHcLj2J16H_CDf1wCm5CnI58SGvU";
@@ -43,8 +42,8 @@ export default function Home() {
       `http://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
     setHourForecast(forecastRes.data.forecast.forecastday[0].hour);
-    getBackgroundImage("weather");
     // get an image from unsplash depending on the weather status
+    getBackgroundImage(query);
   };
 
   const icon = weather?.current?.condition?.icon;
@@ -57,7 +56,7 @@ export default function Home() {
         className="bg-cover bg-center flex min-h-screen flex-col p-4 bg-slate-700"
       >
         <div className="ml-[100px]">
-          <Header data={icon} />
+          <Header data={{ icon: icon, reloadData: getWeather }} />
         </div>
         <div className="flex flex-row m-[100px] space-x-16">
           <div className=" flex flex-col w-[1000px] space-y-16 ">

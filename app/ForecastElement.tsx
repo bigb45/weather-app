@@ -11,7 +11,6 @@ const getHour = (data: any) => {
   return time;
 };
 function ForecastElement(props: any) {
-  console.log(props.data.delay);
   let time = getHour(props.data.hour);
 
   return (
