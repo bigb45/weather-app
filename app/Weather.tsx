@@ -4,7 +4,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 function Weather(props: any) {
   return (
-    <div className="flex flex-col gap-y-10 p-10 rounded-xl m- backdrop-blur-md shadow-lg drop-shadow-xl hover:backdrop-blur-lg transition duration-75">
+    <div className="flex flex-col gap-y-10 p-10 rounded-xl m- backdrop-blur-md shadow-lg drop-shadow-xl transition duration-75">
       <h1 className="text-6xl text-white drop-shadow-2xl shadow-black">
         {props.weather.current ? (
           `${Math.round(props.weather?.current?.temp_c)}°C, `
