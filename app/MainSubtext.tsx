@@ -6,7 +6,7 @@ function MainSubtext(props: any) {
   return (
     <div>
       <h2 className="text-3xl text-white drop-shadow-2xl shadow-black text-center w-[100px]">
-        {props.title ? props.title : <Skeleton count={1} />}
+        {props.title ? props.title + props.modifier : <Skeleton count={1} />}
       </h2>
       <h2 className="text-xl text-white drop-shadow-2xl text-center shadow-black">
         {props.title ? props.subtitle : <Skeleton count={1} />}

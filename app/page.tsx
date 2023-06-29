@@ -8,6 +8,7 @@ import CurrentWeather from "./CurrentWeather";
 import ForecastDetails from "./ForecastDetails";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [image, setImage] = useState<any>("");
@@ -35,12 +36,14 @@ export default function Home() {
     const res = await Axios.get(
       `http://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
+    console.log(userLocation);
     const query = res.data.current.condition.text + " weather";
     setWeather(res.data);
 
     const forecastRes = await Axios.get(
       `http://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
+    console.log(forecastRes.data);
     setHourForecast(forecastRes.data.forecast.forecastday[0].hour);
     // get an image from unsplash depending on the weather status
     getBackgroundImage(query);
