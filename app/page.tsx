@@ -8,17 +8,16 @@ import CurrentWeather from "./CurrentWeather";
 import ForecastDetails from "./ForecastDetails";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useRouter } from "next/router";
+import WeatherContext from "./context/weatherContext.js";
 
 export default function Home() {
   const [image, setImage] = useState<any>("");
   const [weather, setWeather] = useState<any>({});
   const [hourForecast, setHourForecast] = useState<any[]>([]);
-
+  const [weatherDetails, setWeatherDetails] = useState<{}>([]);
   useEffect(() => {
     getWeather();
   }, []);
-
   const getBackgroundImage = async (query: string) => {
     const Access_Key = "nvUefDbjvYifQaZMHcLj2J16H_CDf1wCm5CnI58SGvU";
     const res = await Axios.get(
@@ -36,14 +35,17 @@ export default function Home() {
     const res = await Axios.get(
       `http://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
-    console.log(userLocation);
     const query = res.data.current.condition.text + " weather";
     setWeather(res.data);
+    setWeatherDetails({
+      temp: res.data.current.feelslike_c,
+      wind_speed: res.data.current.wind_kph,
+      uv: res.data.current.uv,
+    });
 
     const forecastRes = await Axios.get(
       `http://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
-    console.log(forecastRes.data);
     setHourForecast(forecastRes.data.forecast.forecastday[0].hour);
     // get an image from unsplash depending on the weather status
     getBackgroundImage(query);
@@ -51,25 +53,27 @@ export default function Home() {
 
   const icon = weather?.current?.condition?.icon;
   return (
-    <SkeletonTheme baseColor="#666" highlightColor="#444">
-      <main
-        style={{
-          backgroundImage: `url(${image})`,
-        }}
-        className="bg-cover bg-center flex min-h-screen flex-col p-4 bg-slate-700"
-      >
-        <div className="ml-[100px]">
-          <Header data={{ icon: icon, reloadData: getWeather }} />
-        </div>
-        <div className="flex flex-row m-[100px] space-x-16">
-          <div className=" flex flex-col w-[1000px] space-y-16 ">
-            <Weather weather={weather} />
-            <CurrentWeather weather={weather} />
+    <WeatherContext.Provider value={{ weatherDetails, setWeatherDetails }}>
+      <SkeletonTheme baseColor="#666" highlightColor="#444">
+        <main
+          style={{
+            backgroundImage: `url(${image})`,
+          }}
+          className="bg-cover bg-center flex min-h-screen flex-col p-4 bg-slate-700"
+        >
+          <div className="ml-[100px]">
+            <Header data={{ icon: icon, reloadData: getWeather }} />
           </div>
-          <ForecastDetails data={hourForecast} />
-        </div>
-      </main>
-    </SkeletonTheme>
+          <div className="flex flex-row m-[100px] space-x-16">
+            <div className=" flex flex-col w-[1000px] space-y-16 ">
+              <Weather weather={weather} />
+              <CurrentWeather />
+            </div>
+            <ForecastDetails data={hourForecast} />
+          </div>
+        </main>
+      </SkeletonTheme>
+    </WeatherContext.Provider>
   );
 }
 

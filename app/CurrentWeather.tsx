@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import MainSubtext from "./MainSubtext";
+import WeatherContext from "./context/weatherContext";
 
-function CurrentWeather(props: any) {
+function CurrentWeather() {
+  const { weatherDetails } = useContext(WeatherContext);
   return (
     <div className="flex flex-row justify-around gap-x-10 gap-y-10 p-10 rounded-xl m- backdrop-blur-md shadow-lg drop-shadow-xl w-full transition duration-75">
-      <div className="flex flex-col justify-around gap-y-10">
-        {props.weather ? (
+      <div className="flex flex-col justify-around gap-y-10" onClick={() => {}}>
+        {weatherDetails ? (
           <MainSubtext
-            title={Math.round(props.weather?.current?.feelslike_c)}
+            title={Math.round(weatherDetails.temp)}
             modifier={"°C"}
             subtitle="Feels like"
           />
@@ -15,19 +17,19 @@ function CurrentWeather(props: any) {
           <MainSubtext />
         )}
         <MainSubtext
-          title={props.weather ? props.weather?.current?.wind_kph : false}
+          title={weatherDetails ? weatherDetails.wind_speed : false}
           modifier={"km/h"}
           subtitle="Winds"
         />
       </div>
       <div className="flex flex-col justify-around gap-y-10">
         <MainSubtext
-          title={props.weather?.current?.uv}
+          title={weatherDetails.uv}
           subtitle="UV Index"
           modifier=""
         />
         <MainSubtext
-          title={props.weather?.current?.uv}
+          title={weatherDetails.uv}
           subtitle="UV Index"
           modifier=""
         />

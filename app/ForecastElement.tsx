@@ -1,8 +1,10 @@
 import { CircularProgress } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { delay, motion } from "framer-motion";
+import Image from "next/image";
+import WeatherContext from "./context/weatherContext";
 
 const getHour = (data: any) => {
   let time = String(new Date(data?.time).getHours());
@@ -11,8 +13,14 @@ const getHour = (data: any) => {
   return time;
 };
 function ForecastElement(props: any) {
-  let time = getHour(props.data.hour);
+  const { weatherDetails, setWeatherDetails } = useContext(WeatherContext);
 
+  const hourlyWeatherData = {
+    temp: props.data?.hour?.temp_c,
+    wind_speed: props.data?.hour?.wind_kph,
+    uv: props?.data?.hour?.uv,
+  };
+  let time = getHour(props.data.hour);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -22,6 +30,10 @@ function ForecastElement(props: any) {
         duration: 0.3,
         ease: "easeOut",
         type: "linear",
+      }}
+      onClick={() => {
+        setWeatherDetails(hourlyWeatherData);
+        console.log(time, hourlyWeatherData);
       }}
       className="flex flex-col space-y-1 justify-center items-center p-3 hover:bg-white/10 transition duration-50  rounded-md "
     >
