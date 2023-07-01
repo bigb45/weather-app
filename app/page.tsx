@@ -28,12 +28,16 @@ export default function Home() {
 
   const getWeather = async () => {
     // get the location of the user
-    const locatoinRes = await Axios.get("http://ip-api.com/json//");
-    const userLocation = locatoinRes.data.city;
+    const ip = await Axios.get("https://ipapi.co/ip/");
+    console.log(ip.data);
+    const locationRes = await Axios.get(`https://ipapi.co/${ip.data}/json/`);
+    console.log(locationRes.data);
+
+    const userLocation = locationRes.data.city;
 
     // get the weather in the specified location
     const res = await Axios.get(
-      `https://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${Location}&aqi=no`
+      `https://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
     const query = res.data.current.condition.text + " weather";
     setWeather(res.data);
