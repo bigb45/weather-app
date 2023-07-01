@@ -8,7 +8,7 @@ function ForecastDetails(props: any) {
   // if (currentTime > 15) currentTime = 15;
   const weatherHours = props.data.slice(currentTime, currentTime + 11);
   return (
-    <div className="flex flex-row justify-around items-center gap-x-10 gap-y-10 p-10 rounded-xl  backdrop-blur-md transition duration-75 shadow-lg drop-shadow-xl w-full flex-wrap">
+    <div className="flex flex-row justify-around items-center gap-x-10 gap-y-10 p-10 rounded-xl  backdrop-blur-md transition duration-75 shadow-lg drop-shadow-xl w-[1000px] flex-wrap ml-0">
       {weatherHours.map((hour: any, key: any) => {
         return (
           <div key={key}>

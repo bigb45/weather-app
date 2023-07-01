@@ -28,7 +28,7 @@ export default function Home() {
 
   const getWeather = async () => {
     // get the location of the user
-    const locatoinRes = await Axios.get("http://ip-api.com/json//");
+    const locatoinRes = await Axios.get("https://ip-api.com/json//");
     const userLocation = locatoinRes.data.city;
 
     // get the weather in the specified location
@@ -64,8 +64,8 @@ export default function Home() {
           <div className="ml-[100px]">
             <Header data={{ icon: icon, reloadData: getWeather }} />
           </div>
-          <div className="flex flex-row m-[100px] space-x-16">
-            <div className=" flex flex-col w-[1000px] space-y-16 ">
+          <div className="flex flex-row flex-wrap lg:m-[100px]  justify-around">
+            <div className="flex flex-col w- space-y-16 ">
               <Weather weather={weather} />
               <CurrentWeather />
             </div>

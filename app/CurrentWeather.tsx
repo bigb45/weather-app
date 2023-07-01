@@ -5,7 +5,7 @@ import WeatherContext from "./context/weatherContext";
 function CurrentWeather() {
   const { weatherDetails } = useContext(WeatherContext);
   return (
-    <div className="currentWeather flex flex-row justify-around gap-x-10 gap-y-10 p-10 rounded-xl m- backdrop-blur-md shadow-lg drop-shadow-xl w-full transition duration-75">
+    <div className="currentWeather flex flex-row justify-around gap-x-10 gap-y-10 p-10 rounded-xl backdrop-blur-md shadow-lg drop-shadow-xl w-full transition duration-75">
       <div className="flex flex-col justify-around gap-y-10">
         {weatherDetails ? (
           <MainSubtext
