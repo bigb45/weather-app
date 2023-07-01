@@ -33,7 +33,7 @@ export default function Home() {
 
     // get the weather in the specified location
     const res = await Axios.get(
-      `http://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
+      `https://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
     const query = res.data.current.condition.text + " weather";
     setWeather(res.data);
@@ -44,7 +44,7 @@ export default function Home() {
     });
 
     const forecastRes = await Axios.get(
-      `http://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
+      `https://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
     );
     setHourForecast(forecastRes.data.forecast.forecastday[0].hour);
     // get an image from unsplash depending on the weather status

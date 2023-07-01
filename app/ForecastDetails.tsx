@@ -6,7 +6,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 function ForecastDetails(props: any) {
   let currentTime = new Date().getHours();
   // if (currentTime > 15) currentTime = 15;
-  const weatherHours = props.data.slice(currentTime, currentTime + 8);
+  const weatherHours = props.data.slice(currentTime, currentTime + 11);
   return (
     <div className="flex flex-row justify-around items-center gap-x-10 gap-y-10 p-10 rounded-xl  backdrop-blur-md transition duration-75 shadow-lg drop-shadow-xl w-full flex-wrap">
       {weatherHours.map((hour: any, key: any) => {
