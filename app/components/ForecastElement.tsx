@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { delay, motion } from "framer-motion";
 import Image from "next/image";
-import WeatherContext from "./context/weatherContext";
+import WeatherContext from "../context/weatherContext";
 
 const getHour = (data: any) => {
   let time = String(new Date(data?.time).getHours());

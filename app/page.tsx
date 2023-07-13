@@ -1,19 +1,20 @@
 "use client";
 import Axios from "axios";
-import { createContext, useEffect, useState } from "react";
-import { Header } from "./Header";
+import { useEffect, useState } from "react";
+import { Header } from "./components/Header";
 import Weather from "./Weather";
-import WeatherDetails from "./ForecastDetails";
-import CurrentWeather from "./CurrentWeather";
-import ForecastDetails from "./ForecastDetails";
+import CurrentWeather from "./components/CurrentWeather";
+import ForecastDetails from "./components/ForecastDetails";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import WeatherContext from "./context/weatherContext.js";
+import Searchbar from "./components/Searchbar";
+import { CircularProgress } from "@mui/material";
 
 export default function Home() {
   const [image, setImage] = useState<any>("");
   const [weather, setWeather] = useState<any>({});
-  const [hourForecast, setHourForecast] = useState<any[]>([]);
+  const [hourForecast, setHourForecast] = useState<any>(null);
   const [weatherDetails, setWeatherDetails] = useState<{}>([]);
   useEffect(() => {
     getWeather();
@@ -23,7 +24,8 @@ export default function Home() {
     const res = await Axios.get(
       `https://api.unsplash.com/search/photos?page=1&query=${query}&client_id=${Access_Key}`
     );
-    setImage(res.data.results[Math.floor(Math.random() * 5)].urls.full);
+    console.log(res.data.results[0].urls);
+    setImage(res.data.results[Math.floor(Math.random() * 5)].urls.regular);
   };
 
   const getWeather = async () => {
@@ -58,7 +60,7 @@ export default function Home() {
   const icon = weather?.current?.condition?.icon;
   return (
     <WeatherContext.Provider value={{ weatherDetails, setWeatherDetails }}>
-      <SkeletonTheme baseColor="#666" highlightColor="#444">
+      <SkeletonTheme baseColor="#6667" highlightColor="#5556">
         <main
           style={{
             backgroundImage: `url(${image})`,
@@ -68,7 +70,11 @@ export default function Home() {
           <div className="ml-[100px]">
             <Header data={{ icon: icon, reloadData: getWeather }} />
           </div>
-          <div className="flex flex-row flex-wrap lg:m-[100px]  justify-around">
+          <div className="flex flex-col justify-center items-center pt-20">
+            <Searchbar />
+          </div>
+
+          <div className="flex flex-row flex-wrap lg:m-[100px] justify-around">
             <div className="flex flex-col w- space-y-16 ">
               <Weather weather={weather} />
               <CurrentWeather />
