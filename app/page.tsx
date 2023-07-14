@@ -5,61 +5,75 @@ import { Header } from "./components/Header";
 import Weather from "./Weather";
 import CurrentWeather from "./components/CurrentWeather";
 import ForecastDetails from "./components/ForecastDetails";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import WeatherContext from "./context/weatherContext.js";
 import Searchbar from "./components/Searchbar";
-import { CircularProgress } from "@mui/material";
 
 export default function Home() {
   const [image, setImage] = useState<any>("");
   const [weather, setWeather] = useState<any>({});
   const [hourForecast, setHourForecast] = useState<any>(null);
   const [weatherDetails, setWeatherDetails] = useState<{}>([]);
+  const [userLocation, setUserLocation] = useState<any>(null);
+  const [error, setError] = useState<boolean>(false);
   useEffect(() => {
-    getWeather();
+    getLocation();
   }, []);
+  useEffect(() => {
+    getWeather(userLocation);
+  }, [userLocation]);
+
   const getBackgroundImage = async (query: string) => {
     const Access_Key = "nvUefDbjvYifQaZMHcLj2J16H_CDf1wCm5CnI58SGvU";
     const res = await Axios.get(
       `https://api.unsplash.com/search/photos?page=1&query=${query}&client_id=${Access_Key}`
     );
-    console.log(res.data.results[0].urls);
     setImage(res.data.results[Math.floor(Math.random() * 5)].urls.regular);
   };
 
-  const getWeather = async () => {
-    // get the location of the user
-    const ip = await Axios.get("https://ipapi.co/ip/");
-    console.log(ip.data);
-    const locationRes = await Axios.get(`https://ipapi.co/${ip.data}/json/`);
-    console.log(locationRes.data);
+  const getLocation = async () => {
+    try {
+      const ip = await Axios.get("https://ipapi.co/ip/");
+      const locationRes = await Axios.get(`https://ipapi.co/${ip.data}/json/`);
+      setUserLocation(locationRes.data.city);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-    const userLocation = locationRes.data.city;
-
+  const getWeather = async (userLocation: any) => {
     // get the weather in the specified location
-    const res = await Axios.get(
-      `https://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
-    );
-    const query = res.data.current.condition.text + " weather";
-    setWeather(res.data);
-    setWeatherDetails({
-      temp: res.data.current.feelslike_c,
-      wind_speed: res.data.current.wind_kph,
-      uv: res.data.current.uv,
-    });
+    try {
+      const res = await Axios.get(
+        `https://api.weatherapi.com/v1/current.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
+      );
+      const query = res.data.current.condition.text + " weather";
+      setWeather(res.data);
+      setWeatherDetails({
+        temp: res.data.current.feelslike_c,
+        wind_speed: res.data.current.wind_kph,
+        uv: res.data.current.uv,
+      });
 
-    const forecastRes = await Axios.get(
-      `https://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
-    );
-    setHourForecast(forecastRes.data.forecast.forecastday[0].hour);
-    // get an image from unsplash depending on the weather status
-    getBackgroundImage(query);
+      const forecastRes = await Axios.get(
+        `https://api.weatherapi.com/v1/forecast.json?key=83a95104b1bd415d96c135127231706&q=${userLocation}&aqi=no`
+      );
+      setHourForecast(forecastRes.data.forecast.forecastday[0].hour);
+
+      // get an image from unsplash depending on the weather status
+      getBackgroundImage(query);
+      setError(false);
+    } catch (e) {
+      setError(true);
+    }
   };
 
   const icon = weather?.current?.condition?.icon;
   return (
-    <WeatherContext.Provider value={{ weatherDetails, setWeatherDetails }}>
+    <WeatherContext.Provider
+      value={{ weatherDetails, setWeatherDetails, setUserLocation }}
+    >
       <SkeletonTheme baseColor="#6667" highlightColor="#5556">
         <main
           style={{
@@ -72,6 +86,9 @@ export default function Home() {
           </div>
           <div className="flex flex-col justify-center items-center pt-20">
             <Searchbar />
+            <div className="pt-10 text-5xl font-bold text-red-500">
+              {error && <h1>Data Unavailable.</h1>}
+            </div>
           </div>
 
           <div className="flex flex-row flex-wrap lg:m-[100px] justify-around">

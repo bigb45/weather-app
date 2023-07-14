@@ -1,16 +1,17 @@
 import SearchIcon from "@mui/icons-material/Search";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import WeatherContext from "../context/weatherContext";
 
 function Searchbar() {
   const [query, setQuery] = useState("");
-
+  const { setUserLocation } = useContext(WeatherContext);
   return (
     <form
       className="bg-white shadow-lg w-[50%] h-16 rounded-full flex-row items-center justify-center py-[15px] px-[30px] space-x-3"
       action="submit"
       onSubmit={(e) => {
         e.preventDefault();
-        console.log("searching for", query);
+        setUserLocation(query);
       }}
     >
       <SearchIcon className="text-slate-400" />
